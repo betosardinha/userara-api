@@ -31,7 +31,7 @@ services:
     container_name: userara-api
     build: .
     volumes:
-      - .:/userara
+      - .:/userara-api
     ports:
       - "3000:3000"
     depends_on:
