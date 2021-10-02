@@ -1,0 +1,44 @@
+version: '3'
+
+services:
+  userara-db:
+    image: postgres
+    container_name: userara-db
+    environment:
+      POSTGRES_PASSWORD: "userara123"
+      POSTGRES_USER: "alberto.sardinha"
+    ports:
+      - "5432:5432"
+    volumes:
+      - "./data/postgres:/var/lib/postgresql/data" 
+    networks:
+      - db-network
+      
+  userara-pgadmin:
+    image: dpage/pgadmin4
+    container_name: userara-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "alberto.sardinha@redealumni.com"
+      PGADMIN_DEFAULT_PASSWORD: "userara123"
+    ports:
+      - "15432:80"
+    depends_on:
+      - userara-db
+    networks:
+      - db-network
+
+  userara-api:
+    container_name: userara-api
+    build: .
+    volumes:
+      - .:/userara
+    ports:
+      - "3000:3000"
+    depends_on:
+      - userara-db
+    networks:
+      - db-network
+
+networks: 
+  db-network:
+    driver: bridge
